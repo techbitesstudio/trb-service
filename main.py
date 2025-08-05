@@ -8,8 +8,9 @@ from pydantic import BaseModel
 import logging
 import os
 import html
-from typing import Optional
+from typing import Optional, Tuple
 from src.service.html_to_pdf import html_to_pdf
+from src.service.genai_services import enhance_with_ai, generate_cover_letter
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +47,19 @@ def unescape_html_content(html_content: str) -> str:
 class PDFRequest(BaseModel):
     html_content: str
 
+class EnhanceRequest(BaseModel):
+    text: str
+
+class EnhancedResponse(BaseModel):
+    enhanced_text: str
+    total_processing_time: float
+    generation_time: float
+
+class CoverLetterResponse(BaseModel):
+    cover_letter: str
+    total_processing_time: float
+    generation_time: float
+
 @app.get("/")
 def read_root():
     """A simple hello world endpoint."""
@@ -56,6 +70,47 @@ def read_root():
 def health_check():
     """Health check endpoint to ensure the service is running."""
     return {"status": "ok"}
+
+@app.post("/enhance-text", response_model=EnhancedResponse, tags=["AI Services"])
+async def enhance_text(request: EnhanceRequest):
+    """
+    Enhance the provided text to make it more professional.
+    
+    Args:
+        request (EnhanceRequest): The request containing the text to enhance.
+        
+    Returns:
+        EnhancedResponse: The enhanced text along with timing information.
+    """
+    try:
+        enhanced_text, total_time, gen_time = enhance_with_ai(request.text)
+        return {
+            "enhanced_text": enhanced_text,
+            "total_processing_time": total_time,
+            "generation_time": gen_time
+        }
+    except Exception as e:
+        logger.error(f"Error enhancing text: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error enhancing text: {str(e)}")
+
+@app.post("/generate-cover-letter", response_model=CoverLetterResponse, tags=["AI Services"])
+async def create_cover_letter():
+    """
+    Generate a professional cover letter for a job application.
+    
+    Returns:
+        CoverLetterResponse: The generated cover letter along with timing information.
+    """
+    try:
+        cover_letter, total_time, gen_time = generate_cover_letter()
+        return {
+            "cover_letter": cover_letter,
+            "total_processing_time": total_time,
+            "generation_time": gen_time
+        }
+    except Exception as e:
+        logger.error(f"Error generating cover letter: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating cover letter: {str(e)}")
 
 
 @app.post("/generate-pdf", response_class=Response, tags=["PDF Generation"])
