@@ -39,7 +39,7 @@ def load_model_and_tokenizer(model_id, local_dir="./local_models"):
 
 # Load model and tokenizer
 model_id = "HuggingFaceTB/SmolLM2-135M-Instruct"
-# tokenizer, model = load_model_and_tokenizer(model_id)
+tokenizer, model = load_model_and_tokenizer(model_id)
 
 def enhance_with_ai(prompt_type, sentence):
     start_time = time.time()
