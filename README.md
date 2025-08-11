@@ -82,10 +82,19 @@ sudo apt install python3.11-venv
 python3 -m venv venv
 ```
 
-4. Install uvicorn
+4. Install all packages
 
 ```bash
-sudo apt install python3-uvicorn
+source venv/bin/activate
+
+pip3 install uv
+
+uv pip install fastapi uvicorn[standard] pyppeteer transformers
+
+uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+uv pip freeze > requirements.txt
+
 ```
 5. run the application
 

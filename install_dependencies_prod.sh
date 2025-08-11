@@ -11,8 +11,6 @@ sudo apt install python3-pip
 
 sudo apt install python3.11-venv
 
-sudo apt install uvicorn
-
 # Create a virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
@@ -23,4 +21,10 @@ fi
 source venv/bin/activate
 
 # Install dependencies
-pip3 install -r requirements.txt
+pip3 install uv
+
+uv pip install fastapi uvicorn[standard] pyppeteer transformers
+
+uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+uv pip freeze > requirements.txt
