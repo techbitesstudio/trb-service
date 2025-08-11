@@ -49,6 +49,7 @@ class PDFRequest(BaseModel):
 
 class EnhanceRequest(BaseModel):
     text: str
+    prompt_type: str
 
 class EnhancedResponse(BaseModel):
     enhanced_text: str
@@ -83,7 +84,7 @@ async def enhance_text(request: EnhanceRequest):
         EnhancedResponse: The enhanced text along with timing information.
     """
     try:
-        enhanced_text, total_time, gen_time = enhance_with_ai(request.text)
+        enhanced_text, total_time, gen_time = enhance_with_ai(request.prompt_type, request.text)
         return {
             "enhanced_text": enhanced_text,
             "total_processing_time": total_time,

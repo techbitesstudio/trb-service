@@ -59,3 +59,36 @@ The first time you run this script, `pyppeteer` will download a compatible versi
 docker stop trb-service-container
 docker rm trb-service-container
 ```
+
+
+### Production deployment steps:
+
+1. Install pip - First time only
+
+```bash
+sudo apt update
+sudo apt install python3-pip
+```
+
+2. Install the python3-venv
+
+```bash
+sudo apt install python3.11-venv
+```
+
+3. Create venv
+
+```bash
+python3 -m venv venv
+```
+
+4. Install uvicorn
+
+```bash
+sudo apt install python3-uvicorn
+```
+5. run the application
+
+```bash
+./run_local.sh
+```
