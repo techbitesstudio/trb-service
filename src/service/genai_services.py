@@ -38,8 +38,8 @@ def load_model_and_tokenizer(model_id, local_dir="./local_models"):
     return tokenizer, model
 
 # Load model and tokenizer
-model_id = "HuggingFaceTB/SmolLM2-135M-Instruct"
-# tokenizer, model = load_model_and_tokenizer(model_id)
+model_id = "HuggingFaceTB/SmolLM2-360M-Instruct"
+tokenizer, model = load_model_and_tokenizer(model_id)
 
 def enhance_with_ai(prompt_type, sentence):
     start_time = time.time()
@@ -55,7 +55,7 @@ def enhance_with_ai(prompt_type, sentence):
 
     inputs = tokenizer(prompt, return_tensors="pt")
     generation_start = time.time()
-    outputs = model.generate(**inputs, max_new_tokens=300)
+    outputs = model.generate(**inputs, max_new_tokens=300, temperature=0.7, do_sample=True)
 
     generation_end = time.time()
 
